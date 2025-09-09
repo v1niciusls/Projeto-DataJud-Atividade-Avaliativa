@@ -3,7 +3,7 @@ Este projeto, desenvolvido como parte da disciplina de Estrutura de dados da Uni
 
 A partir de um arquivo CSV contendo informações de processos do Tribunal de Justiça do Distrito Federal e Territórios (TJDFT), o programa implementa um Tipo Abstrato de Dados (TAD) "Processo" para manipular os dados de forma estruturada.
 
-O código-fonte é capaz de:
+O código-fonte é capaz de determinar:
 
 1. o número de processos presentes na base de dados;
 2. o id_ultimo_oj a partir de id_processo;
