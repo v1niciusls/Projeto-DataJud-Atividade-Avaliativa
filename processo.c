@@ -147,6 +147,30 @@ int contar_flag(Processo *processos, int n, const char *flag) {
                 cont++;
         }
     }
+     else if (strcmp(flag, "indigenas") == 0) {
+        for (int i = 0; i < n; i++) {
+            if (processos[i].flag_indigenas)
+                cont++;
+        }
+    }
+    else if (strcmp(flag, "infancia") == 0) {
+        for (int i = 0; i < n; i++) {
+            if (processos[i].flag_infancia)
+                cont++;
+        }
+    }
+    else if (strcmp(flag, "quilombolas") == 0) {
+        for (int i = 0; i < n; i++) {
+            if (processos[i].flag_quilombolas)
+                cont++;
+        }
+    }
+    else if (strcmp(flag, "ambiental") == 0) {
+        for (int i = 0; i < n; i++) {
+            if (processos[i].flag_ambiental)
+                cont++;
+        }
+    }
 
     return cont;
 }

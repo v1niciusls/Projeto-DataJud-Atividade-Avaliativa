@@ -3,11 +3,13 @@
 
 #define MAX_PROCESSOS 1000
 
-int main() {
+int main()
+{
     Processo processos[MAX_PROCESSOS];
     int n = carregar_processos("TJDFT_amostra.csv", processos, MAX_PROCESSOS);
 
-    if (n < 0) {
+    if (n < 0)
+    {
         printf("Erro ao abrir o arquivo.\n");
         return 1;
     }
@@ -17,6 +19,10 @@ int main() {
     printf("Processo mais antigo: %d\n", obter_processo_mais_antigo(processos, n));
     printf("Processos de violencia domestica: %d\n", contar_flag(processos, n, "violencia_domestica"));
     printf("Processos de feminicidio: %d\n", contar_flag(processos, n, "feminicidio"));
+    printf("Processos de indigenas: %d\n", contar_flag(processos, n, "indigenas"));
+    printf("Processos ambientais %d\n", contar_flag(processos, n, "ambiental"));
+    printf("Processos de quilombolas: %d\n", contar_flag(processos, n, "quilombolas"));
+    printf("Processos de infancia e juventude: %d\n", contar_flag(processos, n, "infancia"));
 
     return 0;
 }
