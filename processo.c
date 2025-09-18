@@ -4,8 +4,12 @@
 #include "processo.h"
 
 int carregar_processos(const char *filename, Processo *processos, int max) {
+
     FILE *fp = fopen(filename, "r");
-    if (!fp) return -1;
+        if(fp == NULL){
+            printf("!! ERRO: arquivo nao pode ser aberto !!\n");
+            exit(1);
+        }
 
     char buffer[1024];
     int count = 0;
@@ -173,4 +177,52 @@ int contar_flag(Processo *processos, int n, const char *flag) {
     }
 
     return cont;
+}
+
+int diferenca_dias(const char *data1, const char *data2){
+
+    int dia1, mes1, ano1, dia2, mes2, ano2;
+    sscanf(data1, "%d-%d-%d", &ano1, &mes1, &dia1);
+    sscanf(data2, "%d-%d-%d", &ano2, &mes2, &dia2);
+    int resultado = (ano2 - ano1) * 365 + (mes2 - mes1) * 30 + (dia2 - dia1);
+
+    return resultado;
+} 
+
+float porcento_meta1(Processo *processos, int n){
+
+    int cnm1 = 0, julgadom1 = 0, desm1 = 0, susm1 = 0;
+        for(int i = 0; i < n; i++){
+            cnm1 += processos[i].cnm1; 
+            julgadom1 += processos[i].julgadom1;
+            desm1 += processos[i].desm1;
+            susm1 += processos[i].susm1;
+        }
+
+    if(julgadom1 == 0){
+        return 0.00f;
+    }
+
+    float resultado = ((float)(cnm1 + desm1 - susm1) / julgadom1) * 100.0;
+    
+    return resultado; 
+}
+
+void gerar_csv(Processo *processos, int n, const char *gerar){
+
+    FILE *fp = fopen(gerar, "w");
+        if(fp == NULL){
+            printf("!! ERRO: arquivo nao pode ser aberto !!\n");
+            exit(1);
+        }
+    
+
+    fprintf(fp, "id_processo; julgadom1\n");
+    for(int i = 0; i < n; i++){
+        if(processos[i].julgadom1 > 0){
+            fprintf(fp, "%d; %d\n", processos[i].id_processo, processos[i].julgadom1);
+        }
+    }
+
+    fclose(fp);
 }

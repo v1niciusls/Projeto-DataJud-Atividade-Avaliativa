@@ -15,7 +15,7 @@ O código-fonte é capaz de determinar:
 8. quantos processos estão relacionadas a causas indígenas;
 9. quantos processos envolve causas relacionadas a infância e juventude;
 10. o número de dias entre dt_recebimento e dt_resolvido;
-11. o percentual de cumprimento da meta 1; e
-12. gerar um arquivo CSV com todos os processos julgados (mérito) na Meta 1
+11. o percentual de cumprimento da meta 1; 
+12. gerar um arquivo CSV com todos os processos julgados (mérito) na Meta 1;
 
 A solução é organizada em três arquivos, seguindo a estrutura padrão de projetos com TADs. O objetivo final é demonstrar habilidades em manipulação de arquivos, estruturas de dados e implementação de funções para resolver problemas práticos de análise de dados.
