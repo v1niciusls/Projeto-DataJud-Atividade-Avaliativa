@@ -4,106 +4,59 @@
 #include "processo.h"
 
 int carregar_processos(const char *filename, Processo *processos, int max) {
-
     FILE *fp = fopen(filename, "r");
-        if(fp == NULL){
-            printf("!! ERRO: arquivo nao pode ser aberto !!\n");
-            exit(1);
-        }
+    if(fp == NULL){
+        printf("!! ERRO: arquivo nao pode ser aberto !!\n");
+        exit(1);
+    }
 
     char buffer[1024];
     int count = 0;
 
+    // Pula a linha de cabeçalho
     fgets(buffer, sizeof(buffer), fp); 
 
     while (fgets(buffer, sizeof(buffer), fp) && count < max) {
         Processo p;
-        char *token = strtok(buffer, ";\n");
+        char *token;
+        int i = 0;
 
-       
-        if (!token) continue;
-        p.id_processo = atoi(token);
-
+        token = strtok(buffer, ";\n");
+        while (token != NULL && i < 28) {
+            switch (i) {
+                case 0: p.id_processo = atoi(token); break;
+                case 1: strncpy(p.numero_sigilo, token, MAX_STR); break;
+                case 2: strncpy(p.sigla_grau, token, MAX_STR); break;
+                case 3: strncpy(p.procedimento, token, MAX_STR); break;
+                case 4: strncpy(p.ramo_justica, token, MAX_STR); break;
+                case 5: strncpy(p.sigla_tribunal, token, MAX_STR); break;
+                case 6: p.id_tribunal = atoi(token); break;
+                case 7: p.recurso = atoi(token); break;
+                case 8: p.id_ultimo_oj = atoi(token); break;
+                case 9: strncpy(p.dt_recebimento, token, MAX_STR); break;
+                case 10: p.id_ultima_classe = atoi(token); break;
+                case 11: p.flag_violencia_domestica = atoi(token); break;
+                case 12: p.flag_feminicidio = atoi(token); break;
+                case 13: p.flag_ambiental = atoi(token); break;
+                case 14: p.flag_quilombolas = atoi(token); break;
+                case 15: p.flag_indigenas = atoi(token); break;
+                case 16: p.flag_infancia = atoi(token); break;
+                case 17: p.decisao = atoi(token); break;
+                case 18: strncpy(p.dt_resolvido, token, MAX_STR); break;
+                case 19: p.cnm1 = atoi(token); break;
+                case 20: p.primeirasentm1 = atoi(token); break;
+                case 21: p.baixm1 = atoi(token); break;
+                case 22: p.decm1 = atoi(token); break;
+                case 23: p.mpum1 = atoi(token); break;
+                case 24: p.julgadom1 = atoi(token); break;
+                case 25: p.desm1 = atoi(token); break;
+                case 26: p.susm1 = atoi(token); break;
+                default: break;
+            }
+            token = strtok(NULL, ";\n");
+            i++;
+        }
         
-        token = strtok(NULL, ";\n");
-        if (!token) continue;
-        strncpy(p.numero_sigilo, token, MAX_STR);
-
-        token = strtok(NULL, ";\n");
-        strncpy(p.sigla_grau, token ? token : "", MAX_STR);
-
-        token = strtok(NULL, ";\n");
-        strncpy(p.procedimento, token ? token : "", MAX_STR);
-
-        token = strtok(NULL, ";\n");
-        strncpy(p.ramo_justica, token ? token : "", MAX_STR);
-
-        token = strtok(NULL, ";\n");
-        strncpy(p.sigla_tribunal, token ? token : "", MAX_STR);
-
-        token = strtok(NULL, ";\n");
-        p.id_tribunal = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.recurso = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.id_ultimo_oj = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        strncpy(p.dt_recebimento, token ? token : "", MAX_STR);
-        
-        token = strtok(NULL, ";\n");
-        p.id_ultima_classe = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.flag_violencia_domestica = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.flag_feminicidio = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.flag_ambiental = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.flag_quilombolas = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.flag_indigenas = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.flag_infancia = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.decisao = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        strncpy(p.dt_resolvido, token ? token : "", MAX_STR);
-
-        token = strtok(NULL, ";\n");
-        p.cnm1 = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.primeirasentm1 = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.baixm1 = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.decm1 = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.mpum1 = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.julgadom1 = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.desm1 = token ? atoi(token) : 0;
-
-        token = strtok(NULL, ";\n");
-        p.susm1 = token ? atoi(token) : 0;
-
         processos[count++] = p;
     }
 
