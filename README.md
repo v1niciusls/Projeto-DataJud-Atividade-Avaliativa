@@ -32,3 +32,9 @@ A solução está organizada em três arquivos principais, seguindo a estrutura 
 - Manipulação de arquivos; 
 - Implementação de estruturas de dados; 
 - Desenvolvimento de funções para resolver problemas práticos de análise de dados.
+
+
+## Como compilar e executar
+```bash
+gcc main.c processo.c -o programa
+.\programa dados.csv
