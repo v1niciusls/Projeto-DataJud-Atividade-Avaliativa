@@ -202,7 +202,7 @@ float porcento_meta1(Processo *processos, int n){
         return 0.00f;
     }
 
-    float resultado = ((float)(cnm1 + desm1 - susm1) / julgadom1) * 100.0;
+    float resultado = ((float) julgadom1 / ((cnm1 + desm1) - susm1)) * 100.0;
     
     return resultado; 
 }
