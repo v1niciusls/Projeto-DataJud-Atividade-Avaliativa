@@ -7,54 +7,69 @@ int carregar_processos(const char *filename, Processo *processos, int max) {
     FILE *fp = fopen(filename, "r");
     if(fp == NULL){
         printf("!! ERRO: arquivo nao pode ser aberto !!\n");
-        exit(1);
+        return 1;
     }
 
-    char buffer[1024];
+    char buffer[2048];
     int count = 0;
 
-    // Pula a linha de cabeçalho
     fgets(buffer, sizeof(buffer), fp); 
 
     while (fgets(buffer, sizeof(buffer), fp) && count < max) {
-        Processo p;
-        char *token;
-        int i = 0;
+        Processo p = {0};
+        char *token = buffer;
+        
+        for (int i = 0; i < 27; i++){
+            char *quebra = strchr(token, ';');
+            if(!quebra) quebra = strchr(token, '\n'); 
+            if(quebra) *quebra = '\0'; 
 
-        token = strtok(buffer, ";\n");
-        while (token != NULL && i < 28) {
-            switch (i) {
-                case 0: p.id_processo = atoi(token); break;
-                case 1: strncpy(p.numero_sigilo, token, MAX_STR); break;
-                case 2: strncpy(p.sigla_grau, token, MAX_STR); break;
-                case 3: strncpy(p.procedimento, token, MAX_STR); break;
-                case 4: strncpy(p.ramo_justica, token, MAX_STR); break;
-                case 5: strncpy(p.sigla_tribunal, token, MAX_STR); break;
-                case 6: p.id_tribunal = atoi(token); break;
-                case 7: p.recurso = atoi(token); break;
-                case 8: p.id_ultimo_oj = atoi(token); break;
-                case 9: strncpy(p.dt_recebimento, token, MAX_STR); break;
-                case 10: p.id_ultima_classe = atoi(token); break;
-                case 11: p.flag_violencia_domestica = atoi(token); break;
-                case 12: p.flag_feminicidio = atoi(token); break;
-                case 13: p.flag_ambiental = atoi(token); break;
-                case 14: p.flag_quilombolas = atoi(token); break;
-                case 15: p.flag_indigenas = atoi(token); break;
-                case 16: p.flag_infancia = atoi(token); break;
-                case 17: p.decisao = atoi(token); break;
-                case 18: strncpy(p.dt_resolvido, token, MAX_STR); break;
-                case 19: p.cnm1 = atoi(token); break;
-                case 20: p.primeirasentm1 = atoi(token); break;
-                case 21: p.baixm1 = atoi(token); break;
-                case 22: p.decm1 = atoi(token); break;
-                case 23: p.mpum1 = atoi(token); break;
-                case 24: p.julgadom1 = atoi(token); break;
-                case 25: p.desm1 = atoi(token); break;
-                case 26: p.susm1 = atoi(token); break;
-                default: break;
+        switch (i) {
+            case 0: p.id_processo = atoi(token); break;
+            case 1: strncpy(p.numero_sigilo, token, MAX_STR-1);
+                    p.numero_sigilo[MAX_STR-1] = '\0';
+                    break;
+            case 2: strncpy(p.sigla_grau, token, MAX_STR-1);
+                    p.sigla_grau[MAX_STR-1] = '\0';
+                    break;
+            case 3: strncpy(p.procedimento, token, MAX_STR-1);
+                    p.procedimento[MAX_STR-1] = '\0';
+                    break;
+            case 4: strncpy(p.ramo_justica, token, MAX_STR-1);
+                    p.ramo_justica[MAX_STR-1] = '\0';
+                    break;
+            case 5: strncpy(p.sigla_tribunal, token, MAX_STR-1);
+                    p.sigla_tribunal[MAX_STR-1] = '\0';
+                    break;
+            case 6: p.id_tribunal = atoi(token); break;
+            case 7: p.recurso = atoi(token); break;
+            case 8: p.id_ultimo_oj = atoi(token); break;
+            case 9: strncpy(p.dt_recebimento, token, MAX_STR-1); 
+                    p.dt_recebimento[MAX_STR-1] = '\0';
+                    break;
+            case 10: p.id_ultima_classe = atoi(token); break;
+            case 11: p.flag_violencia_domestica = atoi(token); break;
+            case 12: p.flag_feminicidio = atoi(token); break;
+            case 13: p.flag_ambiental = atoi(token); break;
+            case 14: p.flag_quilombolas = atoi(token); break;
+            case 15: p.flag_indigenas = atoi(token); break;
+            case 16: p.flag_infancia = atoi(token); break;
+            case 17: p.decisao = atoi(token); break;
+            case 18: strncpy(p.dt_resolvido, token, MAX_STR-1);
+                     p.dt_resolvido[MAX_STR-1] = '\0';
+                     break;
+            case 19: p.cnm1 = atoi(token); break;
+            case 20: p.primeirasentm1 = atoi(token); break;
+            case 21: p.baixm1 = atoi(token); break;
+            case 22: p.decm1 = atoi(token); break;
+            case 23: p.mpum1 = atoi(token); break;
+            case 24: p.julgadom1 = atoi(token); break;
+            case 25: p.desm1 = atoi(token); break;
+            case 26: p.susm1 = atoi(token); break;
+            default: break;    
             }
-            token = strtok(NULL, ";\n");
-            i++;
+            if(!quebra) break;
+            token = quebra + 1;
         }
         
         processos[count++] = p;
@@ -137,9 +152,40 @@ int diferenca_dias(const char *data1, const char *data2){
     int dia1, mes1, ano1, dia2, mes2, ano2;
     sscanf(data1, "%d-%d-%d", &ano1, &mes1, &dia1);
     sscanf(data2, "%d-%d-%d", &ano2, &mes2, &dia2);
-    int resultado = (ano2 - ano1) * 365 + (mes2 - mes1) * 30 + (dia2 - dia1);
+    
+    int dias_mes[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; 
 
-    return resultado;
+    long total[2] = {0, 0}; 
+    int dias[2] = {dia1, dia2};
+    int meses[2] = {mes1, mes2};
+    int anos[2] = {ano1, ano2}; 
+
+    for (int i = 0; i < 2; i++){
+        int d = dias[i];
+        int m = meses[i];
+        int a = anos[i];
+
+        for(int j = 0; j < a; j++){
+            if((j % 4 == 0 && j % 100 != 0) || (j % 400 == 0)){
+                total[i] += 366; 
+            } else {
+                total[i] += 365;
+            }
+        }
+
+        for (int k = 1; k < m; k++){
+            if(k == 2 && ((a % 4 == 0 && a % 100 != 0) || (a % 400 == 0))){
+                total[i] += 29; 
+            } else {
+                total[i] += dias_mes[k-1];
+            }
+        }
+
+        total[i] += d; 
+    }
+
+    return (int)(total[1] - total[0]); 
+
 } 
 
 float porcento_meta1(Processo *processos, int n){
@@ -170,12 +216,13 @@ void gerar_csv(Processo *processos, int n, const char *gerar){
         }
     
 
-    fprintf(fp, "id_processo; julgadom1\n");
+    fprintf(fp, "id_processo;julgadom1\n");
     for(int i = 0; i < n; i++){
         if(processos[i].julgadom1 > 0){
-            fprintf(fp, "%d; %d\n", processos[i].id_processo, processos[i].julgadom1);
+            fprintf(fp, "%d;%d\n", processos[i].id_processo, processos[i].julgadom1);
         }
     }
-
+    
     fclose(fp);
+    
 }

@@ -40,6 +40,6 @@ int obter_processo_mais_antigo(Processo *processos, int n);
 int contar_flag(Processo *processos, int n, const char *flag);
 int diferenca_dias(const char *data1, const char *data2); 
 float porcento_meta1(Processo *processos, int n); 
-void gerar_csv(Processo *processos, int n, const char *gerar); 
+void gerar_csv(Processo *processos, int n, const char *gerar);
 
 #endif
